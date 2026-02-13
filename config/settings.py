@@ -40,9 +40,10 @@ _load_dotenv_file(BASE_DIR / ".env")
 SECRET_KEY = 'django-insecure-f@2_3#a4thjn4h!ovwp=^$0)ck75)*wo4&7p8l&muyl_i-o+-d'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.getenv("DEBUG", "True").lower() == "true"
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [host.strip() for host in os.getenv("ALLOWED_HOSTS", "127.0.0.1,localhost,.vercel.app").split(",") if host.strip()]
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in os.getenv("CSRF_TRUSTED_ORIGINS", "https://*.vercel.app").split(",") if origin.strip()]
 
 
 # Application definition
