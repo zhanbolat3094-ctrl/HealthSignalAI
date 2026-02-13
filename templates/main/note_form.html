@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Case Editor{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h1>
+        {% if mode == "create" %}Create Case Note{% else %}Edit Case Note{% endif %}
+    </h1>
+    <p class="muted">Capture concise clinical context for structured risk assessment output.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <label for="{{ form.title.id_for_label }}">Case title</label>
+        {{ form.title }}
+        {{ form.title.errors }}
+
+        <label for="{{ form.content.id_for_label }}">Symptoms and notes</label>
+        {{ form.content }}
+        {{ form.content.errors }}
+
+        <label for="{{ form.is_done.id_for_label }}">
+            {{ form.is_done }} Mark as reviewed
+        </label>
+        {{ form.is_done.errors }}
+
+        <div class="row" style="margin-top: 16px;">
+            <button class="btn" type="submit">Save</button>
+            <a class="btn secondary" href="{% url 'note_list' %}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block title %}Report Detail{% endblock %}
+
+{% block content %}
+<style>
+    .report-wrap {
+        background: linear-gradient(180deg, #f6faff 0%, #edf4ff 100%);
+        border: 1px solid #d3e2f6;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 20px 38px rgba(22, 52, 84, 0.12);
+    }
+    .report-grid {
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+        margin-top: 14px;
+    }
+    .report-item {
+        background: #fff;
+        border: 1px solid #d8e6f6;
+        border-radius: 12px;
+        padding: 10px 12px;
+    }
+    .report-output {
+        margin-top: 14px;
+        background: #fff;
+        border: 1px solid #d8e6f6;
+        border-radius: 14px;
+        padding: 16px;
+        white-space: pre-wrap;
+        line-height: 1.6;
+        color: #28405f;
+    }
+    @media (max-width: 860px) {
+        .report-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="report-wrap">
+    <span class="kicker">Saved Report</span>
+    <h1>Report #{{ report_item.id }}</h1>
+    <p class="muted">Created: {{ report_item.created_at|date:"Y-m-d H:i" }}</p>
+
+    <div class="row" style="margin-top: 8px;">
+        <a class="btn secondary" href="{% url 'profile' %}">Back to Profile</a>
+        <a class="btn" href="{% url 'assessment_test' %}">Run New Analysis</a>
+    </div>
+
+    <div class="report-grid">
+        <div class="report-item">
+            <p><strong>Age:</strong> {{ report_item.payload.age }}</p>
+            <p><strong>Gender:</strong> {{ report_item.payload.gender }}</p>
+        </div>
+        <div class="report-item">
+            <p><strong>Duration:</strong> {{ report_item.payload.symptom_duration }}</p>
+            <p><strong>Questions:</strong> {{ report_item.payload.question_answers|length }}</p>
+        </div>
+        <div class="report-item">
+            <p><strong>Additional Notes:</strong></p>
+            <p class="muted">{{ report_item.payload.additional_notes|default:"None provided" }}</p>
+        </div>
+    </div>
+
+    <div class="report-output">{{ report_item.ai_report }}</div>
+</section>
+{% endblock %}

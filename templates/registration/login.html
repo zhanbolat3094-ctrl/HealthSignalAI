@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block title %}Sign In{% endblock %}
+
+{% block content %}
+<section class="card">
+    <span class="kicker">Secure Access</span>
+    <h1>Sign In to HealthSignal AI</h1>
+    <p class="muted">Use your account to continue working with symptom assessments and case notes.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+
+        <label for="{{ form.password.id_for_label }}">Password</label>
+        {{ form.password }}
+        {{ form.password.errors }}
+
+        {% if next %}
+            <input type="hidden" name="next" value="{{ next }}">
+        {% endif %}
+
+        <div class="row" style="margin-top: 16px;">
+            <button class="btn" type="submit">Sign In</button>
+            <a class="btn secondary" href="{% url 'signup' %}">Create Account</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

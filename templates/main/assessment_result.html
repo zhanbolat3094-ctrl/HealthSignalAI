@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}AI Analysis Result{% endblock %}
+
+{% block content %}
+<style>
+    .result-shell {
+        background: linear-gradient(180deg, #f6faff 0%, #edf4ff 100%);
+        border: 1px solid #d3e2f6;
+        border-radius: 24px;
+        padding: 24px;
+        box-shadow: 0 20px 38px rgba(22, 52, 84, 0.12);
+    }
+    .result-head {
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+        align-items: center;
+        flex-wrap: wrap;
+    }
+    .result-id {
+        background: #edf4ff;
+        border: 1px solid #c3d8f7;
+        color: #276dce;
+        border-radius: 999px;
+        padding: 6px 11px;
+        font-weight: 800;
+        font-size: 0.82rem;
+    }
+    .analysis-box {
+        margin-top: 14px;
+        background: #fff;
+        border: 1px solid #d8e6f6;
+        border-radius: 14px;
+        padding: 16px;
+        line-height: 1.6;
+        white-space: pre-wrap;
+        color: #28405f;
+    }
+    .summary-grid {
+        margin-top: 14px;
+        display: grid;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        gap: 12px;
+    }
+    .summary-item {
+        background: #fff;
+        border: 1px solid #d8e6f6;
+        border-radius: 12px;
+        padding: 11px;
+    }
+    .summary-item strong {
+        color: #1b2f4d;
+    }
+    @media (max-width: 860px) {
+        .summary-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<section class="result-shell">
+    <div class="result-head">
+        <div>
+            <span class="kicker">Analysis Complete</span>
+            <h1>HealthSignal AI Result</h1>
+            <p class="muted">Your answers were analyzed on a separate result page with structured clinical reasoning.</p>
+        </div>
+        {% if assessment %}
+            <span class="result-id">Report #{{ assessment.id }}</span>
+        {% endif %}
+    </div>
+
+    <div class="row" style="margin-top: 8px;">
+        <a class="btn" href="{% url 'assessment_test' %}">Run New Analysis</a>
+        <a class="btn secondary" href="{% url 'home' %}">Back to Home</a>
+        <a class="btn ghost" href="{% url 'profile' %}">View History</a>
+    </div>
+
+    <div class="analysis-box">{{ report }}</div>
+
+    <div class="summary-grid">
+        <div class="summary-item">
+            <p><strong>Age:</strong> {{ payload.age }}</p>
+            <p><strong>Gender:</strong> {{ payload.gender }}</p>
+        </div>
+        <div class="summary-item">
+            <p><strong>Symptom Duration:</strong> {{ payload.symptom_duration }}</p>
+            <p><strong>Total Questions:</strong> {{ question_count }}</p>
+        </div>
+        <div class="summary-item">
+            <p><strong>Additional Notes:</strong></p>
+            <p class="muted">{{ payload.additional_notes|default:"None provided" }}</p>
+        </div>
+    </div>
+</section>
+{% endblock %}

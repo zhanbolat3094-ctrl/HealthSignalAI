@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}Case Workspace{% endblock %}
+
+{% block content %}
+<section class="card">
+    <div class="row" style="justify-content: space-between;">
+        <h1>Case Workspace</h1>
+        <a class="btn" href="{% url 'note_create' %}">New Case Note</a>
+    </div>
+    <p class="muted">Store symptom clusters, risk factors, and triage assumptions for each case.</p>
+</section>
+
+{% for note in notes %}
+<section class="card">
+    <h3>
+        {{ note.title }}
+        {% if note.is_done %}<span class="chip">reviewed</span>{% endif %}
+    </h3>
+    <p class="muted">{{ note.content|default:"No case details added yet." }}</p>
+    <div class="row">
+        <a class="btn" href="{% url 'note_update' note.id %}">Edit</a>
+        <a class="btn danger" href="{% url 'note_delete' note.id %}">Delete</a>
+    </div>
+</section>
+{% empty %}
+<section class="card">
+    <p class="muted">No case notes yet.</p>
+</section>
+{% endfor %}
+
+<a class="btn secondary" href="{% url 'home' %}">Back to Dashboard</a>
+{% endblock %}

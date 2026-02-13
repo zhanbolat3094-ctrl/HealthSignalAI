@@ -1,0 +1,104 @@
+{% extends "base.html" %}
+
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+<section class="hero">
+    <article class="card">
+        <span class="kicker">Account Center</span>
+        <h1>Your Profile</h1>
+        <p class="muted">Manage account details and security settings.</p>
+        <div class="grid-3">
+            <div class="metric">
+                <strong>{{ user.username }}</strong>
+                <p class="muted">Username</p>
+            </div>
+            <div class="metric">
+                <strong>{{ user.date_joined|date:"Y-m-d" }}</strong>
+                <p class="muted">Member since</p>
+            </div>
+            <div class="metric">
+                <strong>{% if user.last_login %}{{ user.last_login|date:"Y-m-d H:i" }}{% else %}-{% endif %}</strong>
+                <p class="muted">Last login</p>
+            </div>
+        </div>
+    </article>
+    <aside class="photo-frame">
+        <img src="https://images.unsplash.com/photo-1576091160550-2173dba999ef?auto=format&fit=crop&w=1400&q=80" alt="Healthcare professional profile interface">
+    </aside>
+</section>
+
+<section class="grid-2">
+    <article class="card">
+        <h2>Edit Account Info</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="profile">
+            {{ profile_form.non_field_errors }}
+
+            <label for="{{ profile_form.username.id_for_label }}">Username</label>
+            {{ profile_form.username }}
+            {{ profile_form.username.errors }}
+
+            <label for="{{ profile_form.first_name.id_for_label }}">First name</label>
+            {{ profile_form.first_name }}
+            {{ profile_form.first_name.errors }}
+
+            <label for="{{ profile_form.last_name.id_for_label }}">Last name</label>
+            {{ profile_form.last_name }}
+            {{ profile_form.last_name.errors }}
+
+            <label for="{{ profile_form.email.id_for_label }}">Email</label>
+            {{ profile_form.email }}
+            {{ profile_form.email.errors }}
+
+            <div class="row" style="margin-top: 14px;">
+                <button class="btn" type="submit">Save Profile</button>
+            </div>
+        </form>
+    </article>
+
+    <article class="card">
+        <h2>Change Password</h2>
+        <form method="post">
+            {% csrf_token %}
+            <input type="hidden" name="action" value="password">
+            {{ password_form.non_field_errors }}
+
+            <label for="{{ password_form.old_password.id_for_label }}">Current password</label>
+            {{ password_form.old_password }}
+            {{ password_form.old_password.errors }}
+
+            <label for="{{ password_form.new_password1.id_for_label }}">New password</label>
+            {{ password_form.new_password1 }}
+            {{ password_form.new_password1.errors }}
+
+            <label for="{{ password_form.new_password2.id_for_label }}">Confirm new password</label>
+            {{ password_form.new_password2 }}
+            {{ password_form.new_password2.errors }}
+
+            <div class="row" style="margin-top: 14px;">
+                <button class="btn secondary" type="submit">Update Password</button>
+            </div>
+        </form>
+    </article>
+</section>
+
+<section class="card">
+    <h2>Saved AI Reports</h2>
+    <p class="muted">User responses and AI analysis are saved automatically for each completed test.</p>
+    {% if assessment_reports %}
+        {% for item in assessment_reports %}
+            <div class="metric" style="margin-bottom: 10px;">
+                <p><strong>Report #{{ item.id }}</strong></p>
+                <p class="muted">Created: {{ item.created_at|date:"Y-m-d H:i" }}</p>
+                <div class="row">
+                    <a class="btn secondary" href="{% url 'report_detail' item.id %}">View Report</a>
+                </div>
+            </div>
+        {% endfor %}
+    {% else %}
+        <p class="muted">No saved reports yet.</p>
+    {% endif %}
+</section>
+{% endblock %}

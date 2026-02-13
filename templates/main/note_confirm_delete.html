@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}Delete Case{% endblock %}
+
+{% block content %}
+<section class="card">
+    <h1>Delete Case Note</h1>
+    <p class="muted">This action removes the note from your workspace.</p>
+    <p>Delete "<strong>{{ note.title }}</strong>"?</p>
+    <form method="post">
+        {% csrf_token %}
+        <div class="row">
+            <button class="btn danger" type="submit">Delete</button>
+            <a class="btn secondary" href="{% url 'note_list' %}">Cancel</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

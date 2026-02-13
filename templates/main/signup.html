@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<section class="card">
+    <span class="kicker">Secure Access</span>
+    <h1>Create Clinical Workspace Account</h1>
+    <p class="muted">Account access is required before working with case notes and risk assessments.</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <label for="{{ form.username.id_for_label }}">Username</label>
+        {{ form.username }}
+        {{ form.username.errors }}
+
+        <label for="{{ form.email.id_for_label }}">Email</label>
+        {{ form.email }}
+        {{ form.email.errors }}
+
+        <label for="{{ form.password1.id_for_label }}">Password</label>
+        {{ form.password1 }}
+        {{ form.password1.errors }}
+
+        <label for="{{ form.password2.id_for_label }}">Confirm password</label>
+        {{ form.password2 }}
+        {{ form.password2.errors }}
+
+        <div class="row" style="margin-top: 16px;">
+            <button class="btn" type="submit">Create Account</button>
+            <a class="btn secondary" href="{% url 'login' %}">Already Registered</a>
+        </div>
+    </form>
+</section>
+{% endblock %}
