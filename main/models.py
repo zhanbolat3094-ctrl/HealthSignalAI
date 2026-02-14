@@ -3,6 +3,11 @@ from django.db import models
 
 
 class Note(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="notes",
+    )
     title = models.CharField(max_length=120)
     content = models.TextField(blank=True)
     is_done = models.BooleanField(default=False)

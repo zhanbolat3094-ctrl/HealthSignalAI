@@ -4,94 +4,319 @@
 
 {% block content %}
 <style>
-    .result-shell {
-        background: linear-gradient(180deg, #f6faff 0%, #edf4ff 100%);
-        border: 1px solid #d3e2f6;
-        border-radius: 24px;
-        padding: 24px;
-        box-shadow: 0 20px 38px rgba(22, 52, 84, 0.12);
+    .report-layout {
+        display: grid;
+        grid-template-columns: 210px 1fr 280px;
+        gap: 16px;
+        align-items: start;
     }
-    .result-head {
+    .panel {
+        background: rgba(255, 255, 255, 0.88);
+        border: 1px solid #d4e1f1;
+        border-radius: 18px;
+        box-shadow: 0 14px 28px rgba(18, 46, 76, 0.1);
+        backdrop-filter: blur(6px);
+    }
+    .left-nav {
+        padding: 14px;
+        position: sticky;
+        top: 82px;
+    }
+    .left-nav h4 {
+        margin: 0 0 12px;
+        color: #1a3254;
+        font-size: 0.95rem;
+    }
+    .left-link {
+        display: block;
+        padding: 10px 11px;
+        border-radius: 11px;
+        text-decoration: none;
+        color: #35547d;
+        font-weight: 700;
+        font-size: 0.9rem;
+        margin-bottom: 8px;
+        border: 1px solid transparent;
+    }
+    .left-link.active {
+        background: #eaf3ff;
+        border-color: #bed6f7;
+        color: #1f6fdc;
+    }
+    .main-report {
+        padding: 16px;
+    }
+    .top-head {
         display: flex;
         justify-content: space-between;
-        gap: 12px;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-bottom: 12px;
+    }
+    .top-head h1 {
+        margin-bottom: 4px;
+    }
+    .head-meta {
+        color: #5b7191;
+        font-size: 0.9rem;
+        font-weight: 700;
+    }
+    .actions {
+        display: flex;
         align-items: center;
+        gap: 8px;
         flex-wrap: wrap;
     }
-    .result-id {
-        background: #edf4ff;
-        border: 1px solid #c3d8f7;
-        color: #276dce;
-        border-radius: 999px;
-        padding: 6px 11px;
-        font-weight: 800;
-        font-size: 0.82rem;
+    .btn.small {
+        padding: 8px 12px;
+        font-size: 0.85rem;
     }
-    .analysis-box {
-        margin-top: 14px;
-        background: #fff;
-        border: 1px solid #d8e6f6;
+    .section-card {
+        margin-top: 12px;
+        padding: 14px;
         border-radius: 14px;
-        padding: 16px;
-        line-height: 1.6;
-        white-space: pre-wrap;
-        color: #28405f;
+        border: 1px solid #d8e5f4;
+        background: #fff;
+    }
+    .section-title {
+        margin: 0 0 10px;
+        color: #1b2f4d;
+        font-size: 1rem;
     }
     .summary-grid {
-        margin-top: 14px;
         display: grid;
-        grid-template-columns: repeat(3, minmax(0, 1fr));
-        gap: 12px;
+        grid-template-columns: repeat(4, minmax(0, 1fr));
+        gap: 10px;
     }
     .summary-item {
-        background: #fff;
-        border: 1px solid #d8e6f6;
+        border: 1px solid #d8e5f3;
         border-radius: 12px;
-        padding: 11px;
+        background: #f8fbff;
+        padding: 10px;
     }
-    .summary-item strong {
-        color: #1b2f4d;
+    .summary-item .k {
+        color: #6280a4;
+        text-transform: uppercase;
+        font-size: 0.72rem;
+        letter-spacing: 0.06em;
+        font-weight: 800;
     }
-    @media (max-width: 860px) {
-        .summary-grid {
+    .summary-item .v {
+        color: #173053;
+        font-weight: 800;
+        margin-top: 3px;
+    }
+    .text-block {
+        white-space: pre-wrap;
+        line-height: 1.58;
+        color: #324a6c;
+        font-size: 0.95rem;
+    }
+    .condition-card {
+        border: 1px solid #d8e5f3;
+        border-radius: 12px;
+        background: #fbfdff;
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    .condition-head {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        gap: 8px;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .confidence-chip {
+        border: 1px solid #c4daf7;
+        border-radius: 999px;
+        padding: 3px 9px;
+        color: #266dcc;
+        background: #edf4ff;
+        font-size: 0.78rem;
+        font-weight: 800;
+    }
+    .meter {
+        height: 8px;
+        width: 100%;
+        border-radius: 999px;
+        background: #dee9f8;
+        overflow: hidden;
+        margin-top: 8px;
+    }
+    .meter > span {
+        display: block;
+        height: 100%;
+        background: linear-gradient(90deg, #2f80ed 0%, #58a0f7 100%);
+    }
+    .right-col {
+        padding: 14px;
+        position: sticky;
+        top: 82px;
+    }
+    .risk-card {
+        text-align: center;
+        padding: 14px;
+        border: 1px solid #d8e4f3;
+        border-radius: 14px;
+        background: #fff;
+        margin-bottom: 12px;
+    }
+    .risk-circle {
+        --p: 50;
+        width: 130px;
+        height: 130px;
+        border-radius: 50%;
+        margin: 8px auto 12px;
+        background: conic-gradient(#ef7b2f calc(var(--p) * 1%), #e9eef7 0);
+        display: grid;
+        place-items: center;
+    }
+    .risk-inner {
+        width: 96px;
+        height: 96px;
+        border-radius: 50%;
+        background: #fff;
+        border: 1px solid #dae5f4;
+        display: grid;
+        place-items: center;
+        font-weight: 800;
+        color: #213b5f;
+    }
+    .mini-card {
+        border: 1px solid #d8e5f3;
+        border-radius: 13px;
+        background: #fff;
+        padding: 12px;
+        margin-bottom: 10px;
+    }
+    .mini-title {
+        margin: 0 0 8px;
+        color: #1f3453;
+        font-size: 0.95rem;
+    }
+    @media (max-width: 1100px) {
+        .report-layout {
             grid-template-columns: 1fr;
+        }
+        .left-nav,
+        .right-col {
+            position: static;
+        }
+    }
+    @media (max-width: 760px) {
+        .summary-grid {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
         }
     }
 </style>
 
-<section class="result-shell">
-    <div class="result-head">
-        <div>
-            <span class="kicker">Analysis Complete</span>
-            <h1>HealthSignal AI Result</h1>
-            <p class="muted">Your answers were analyzed on a separate result page with structured clinical reasoning.</p>
-        </div>
-        {% if assessment %}
-            <span class="result-id">Report #{{ assessment.id }}</span>
-        {% endif %}
-    </div>
+<section class="report-layout">
+    <aside class="panel left-nav">
+        <h4>Patient</h4>
+        <a class="left-link active" href="#summary">Current Report</a>
+        <a class="left-link" href="#conditions">Differential</a>
+        <a class="left-link" href="#diagnostics">Diagnostics</a>
+        <a class="left-link" href="{% url 'profile' %}">History</a>
+    </aside>
 
-    <div class="row" style="margin-top: 8px;">
-        <a class="btn" href="{% url 'assessment_test' %}">Run New Analysis</a>
-        <a class="btn secondary" href="{% url 'home' %}">Back to Home</a>
-        <a class="btn ghost" href="{% url 'profile' %}">View History</a>
-    </div>
+    <article class="panel main-report">
+        <div class="top-head">
+            <div>
+                <span class="kicker">Analysis Report</span>
+                <h1>Clinical Assessment</h1>
+                <p class="head-meta">Generated: {% now "Y-m-d H:i" %}</p>
+            </div>
+            <div class="actions">
+                <button class="btn ghost small" type="button" onclick="window.print()">Print</button>
+                {% if assessment.pdf_file %}
+                    <a class="btn secondary small" href="{{ assessment.pdf_file.url }}">Export PDF</a>
+                {% else %}
+                    <button class="btn secondary small" type="button" disabled title="PDF is not generated yet">Export PDF</button>
+                {% endif %}
+            </div>
+        </div>
 
-    <div class="analysis-box">{{ report }}</div>
+        <section id="summary" class="section-card">
+            <h2 class="section-title">Clinical Summary</h2>
+            <div class="summary-grid">
+                <div class="summary-item">
+                    <div class="k">Age / Gender</div>
+                    <div class="v">{{ payload.age }} / {{ payload.gender|default:"-" }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="k">Duration</div>
+                    <div class="v">{{ payload.symptom_duration|default:"-" }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="k">Questions</div>
+                    <div class="v">{{ question_count }}</div>
+                </div>
+                <div class="summary-item">
+                    <div class="k">Report ID</div>
+                    <div class="v">#{{ assessment.id }}</div>
+                </div>
+            </div>
+            <div class="text-block" style="margin-top:10px;">{{ sections.clinical_summary|default:"Clinical summary was not generated." }}</div>
+        </section>
 
-    <div class="summary-grid">
-        <div class="summary-item">
-            <p><strong>Age:</strong> {{ payload.age }}</p>
-            <p><strong>Gender:</strong> {{ payload.gender }}</p>
+        <section id="conditions" class="section-card">
+            <h2 class="section-title">Most Likely Conditions (Ranked)</h2>
+            {% for card in condition_cards %}
+                <div class="condition-card">
+                    <div class="condition-head">
+                        <strong>{{ card.title }}</strong>
+                        <span class="confidence-chip">{{ card.confidence }}% confidence</span>
+                    </div>
+                    {% if card.details %}
+                        <div class="text-block">{{ card.details }}</div>
+                    {% endif %}
+                    <div class="meter"><span style="width: {{ card.confidence }}%;"></span></div>
+                </div>
+            {% empty %}
+                <div class="text-block">{{ sections.most_likely_conditions|default:"No differential data." }}</div>
+            {% endfor %}
+        </section>
+
+        <section id="diagnostics" class="section-card">
+            <h2 class="section-title">Recommended Diagnostic Tests</h2>
+            <div class="text-block">{{ sections.recommended_diagnostic_tests|default:"No diagnostics suggested." }}</div>
+        </section>
+
+        <section class="section-card">
+            <h2 class="section-title">Raw AI Output</h2>
+            <div class="text-block">{{ report }}</div>
+        </section>
+    </article>
+
+    <aside class="panel right-col">
+        <div class="risk-card">
+            <p class="kicker" style="margin-bottom:6px;">Risk Stratification</p>
+            <div class="risk-circle" style="--p: {{ risk_score }};">
+                <div class="risk-inner">{{ risk_score }}%</div>
+            </div>
+            <h3 style="margin: 0 0 6px;">{{ risk_label }}</h3>
+            <div class="text-block">{{ sections.risk_stratification|default:"Risk classification is not available." }}</div>
         </div>
-        <div class="summary-item">
-            <p><strong>Symptom Duration:</strong> {{ payload.symptom_duration }}</p>
-            <p><strong>Total Questions:</strong> {{ question_count }}</p>
+
+        <div class="mini-card">
+            <h3 class="mini-title">Recommended Next Steps</h3>
+            <div class="text-block">{{ sections.recommended_next_steps|default:"No next steps provided." }}</div>
         </div>
-        <div class="summary-item">
-            <p><strong>Additional Notes:</strong></p>
-            <p class="muted">{{ payload.additional_notes|default:"None provided" }}</p>
+
+        <div class="mini-card">
+            <h3 class="mini-title">What to Monitor</h3>
+            <div class="text-block">{{ sections.what_to_monitor|default:"No monitoring checklist provided." }}</div>
         </div>
-    </div>
+
+        <div class="mini-card">
+            <h3 class="mini-title">Red Flags</h3>
+            <div class="text-block">{{ sections.red_flags|default:"No red flags section returned." }}</div>
+        </div>
+
+        <div class="mini-card">
+            <h3 class="mini-title">General Advice</h3>
+            <div class="text-block">{{ sections.general_supportive_advice|default:"No supportive advice provided." }}</div>
+        </div>
+    </aside>
 </section>
 {% endblock %}
